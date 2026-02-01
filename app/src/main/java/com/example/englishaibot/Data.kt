@@ -2,6 +2,6 @@ package com.example.englishaibot
 
 object Data{
 
-    val  apiKey ="AIzaSyBXexOLUEmbHU0gRSLTm_o6hhvue-okADE"
+    val  apiKey ="Enter Api Key "
 
 }
