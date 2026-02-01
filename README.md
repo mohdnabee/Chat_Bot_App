@@ -93,9 +93,13 @@ GEMINI_API_KEY=your_api_key_here
 
 ---
 
-## 📸 Screens (Optional)
+## 📸 Screens 
 
-<img width="1080" height="2400" alt="Screenshot_20260201_234432" src="https://github.com/user-attachments/assets/7e089276-4dc0-476f-bbf5-7c31e314edd2" />
+<img width="300" height="600" alt="Screenshot_20260201_234432" src="https://github.com/user-attachments/assets/7e089276-4dc0-476f-bbf5-7c31e314edd2" />
+<img width="300" height="600" alt="Screenshot_20260201_234502" src="https://github.com/user-attachments/assets/79e0ff01-1eed-4be3-a220-10132ae9419b" />
+<img width="300" height="600" alt="Screenshot_20260201_234432" src="https://github.com/user-attachments/assets/e7004443-ab6a-4094-851a-d98851c3287c" />
+
+
 
 
 ---
