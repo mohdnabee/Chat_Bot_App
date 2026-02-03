@@ -40,7 +40,7 @@ class IntoActivity : AppCompatActivity() {
         setContent {
             IntroScreenPreview(onGetStartedClick ={
                 startActivity(Intent(this, MainActivity::class.java))
-            } )
+            }  )
 
 
         }
@@ -76,7 +76,7 @@ fun IntroScreen(onGetStartedClick: () -> Unit) {
                         end.linkTo(parent.end)
                     }
                     .fillMaxWidth()
-                    .height(700.dp),
+                    .height(600.dp),
                 contentScale = ContentScale.FillBounds
             )
             Text(
@@ -102,8 +102,8 @@ fun IntroScreen(onGetStartedClick: () -> Unit) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
-                        .width(300.dp)
-                        .height(300.dp)
+                        .width(200.dp)
+                        .height(200.dp)
                 }
                 , contentScale = ContentScale.Fit
             )
@@ -113,7 +113,7 @@ fun IntroScreen(onGetStartedClick: () -> Unit) {
                 fontWeight = FontWeight.Bold,
                 color = Color(0xff3d33a8),
                 modifier = Modifier
-                    .padding(top = 102.dp)
+                    .padding(top = 90.dp)
                     .constrainAs(subtitleTxt){
                         top.linkTo(logoImg.bottom, margin = 16.dp)
                         start.linkTo(parent.start)
