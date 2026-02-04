@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,8 +37,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,25 +50,40 @@ import com.example.englishaibot.ui.theme.Pink40
 
 @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 @Composable
-fun ChatPage(modifier: Modifier = Modifier, viewModel: ChatViewModel) {
+fun ChatPage(
+    modifier: Modifier = Modifier,
+    viewModel: ChatViewModel
+) {
+
+
+    val gradientBrush = Brush.verticalGradient(
+        colors = listOf(
+            Color(0xFF0F2027),
+            Color(0xFF203A43),
+            Color(0xFF2C5364)
+        )
+    )
+
     Column(
-        modifier = modifier
+        modifier = modifier.fillMaxSize().background(gradientBrush)
     ) {
         AppHeader()
         MessageList(
             modifier = Modifier.weight(1f),
             messageList = viewModel.messageList
         )
-        MessageInput(
-            onMessageSend = {
-                viewModel.sendMessage(it)
-            }
-        )
+        MessageInput {
+            viewModel.sendMessage(it)
+        }
     }
 }
 
+
 @Composable
-fun MessageList(modifier: Modifier = Modifier, messageList: List<ModelActivity>) {
+fun MessageList(
+    modifier: Modifier = Modifier,
+    messageList: List<ModelActivity>
+) {
     if (messageList.isEmpty()) {
         Column(
             modifier = modifier.fillMaxSize(),
@@ -71,110 +91,120 @@ fun MessageList(modifier: Modifier = Modifier, messageList: List<ModelActivity>)
             verticalArrangement = Arrangement.Center
         ) {
             Icon(
-                modifier = Modifier.size(60.dp),
                 painter = painterResource(id = R.drawable.logo),
-                contentDescription = "Icon",
-                tint = Pink40,
+                contentDescription = null,
+                modifier = Modifier.size(72.dp),
+                tint = Pink40
             )
-            Text(text = "Can You Help Me", fontSize = 22.sp)
+            Text(
+                text = "Ask me anything in English 👋",
+                fontSize = 18.sp, color = Color.White,
+                fontWeight = FontWeight.Medium
+            )
         }
     } else {
         LazyColumn(
-            modifier = modifier,
+            modifier = modifier.padding(vertical = 8.dp),
             reverseLayout = true
         ) {
             items(messageList.reversed()) {
-                MessageRow(messageModel = it)
+                MessageRow(it)
             }
         }
     }
 }
+
 
 @Composable
 fun MessageRow(messageModel: ModelActivity) {
+
     val isModel = messageModel.role == "model"
 
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        horizontalArrangement = if (isModel) Arrangement.Start else Arrangement.End
     ) {
 
-        Box(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-
-            Box(
-                modifier = Modifier
-                    .align(if (isModel) Alignment.BottomStart else Alignment.BottomEnd)
-                    .padding(
-                        start = if (isModel) 8.dp else 70.dp,
-                        end = if (isModel) 70.dp else 8.dp,
-                        top = 8.dp,
-                        bottom = 8.dp
-                    )
-                    .clip(RoundedCornerShape(48f))
-                    .background(if (isModel) ColorModelMessage else ColorUserMessage)
-                    .padding(16.dp)
-            ) {
-
-                SelectionContainer {
-                    Text(
-                        text = messageModel.message,
-                        fontWeight = FontWeight.W500,
-                        color = Color.White
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun MessageInput(onMessageSend: (String) -> Unit) {
-
-    var message by remember {
-        mutableStateOf("")
-    }
-
-    Row(
-        modifier = Modifier.padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        OutlinedTextField(
-            modifier = Modifier.weight(1f),
-            value = message,
-            onValueChange = {
-                message = it
-            },
-            placeholder = {
-                Text(text = "Type your message...")
-            }
-        )
         Box(
             modifier = Modifier
-                .padding(start = 8.dp)
-                .size(60.dp) // बड़ा सर्कल
-                .clip(RoundedCornerShape(30.dp)) // सर्कुलर आकार
-                .background(MaterialTheme.colorScheme.primary), // बैकग्राउंड कलर
-            contentAlignment = Alignment.Center // आइकन को सेंटर करें
+                .widthIn(max = 280.dp)
+                .clip(
+                    RoundedCornerShape(
+                        topStart = 16.dp,
+                        topEnd = 16.dp,
+                        bottomStart = if (isModel) 0.dp else 16.dp,
+                        bottomEnd = if (isModel) 16.dp else 0.dp
+                    )
+                )
+                .background(if (isModel) ColorModelMessage else ColorUserMessage)
+                .padding(14.dp)
         ) {
-            IconButton(
-                onClick = {
-                    if (message.isNotEmpty()) {
-                        onMessageSend(message)
-                        message = ""
-                    }
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Send,
-                    contentDescription = "Send",
-                    tint = Color.White, // आइकन का रंग
-                    modifier = Modifier.size(28.dp) // आइकन का साइज
+            SelectionContainer {
+                Text(
+                    text = messageModel.message,
+                    color = Color.White,
+                    fontSize = 15.sp,
+                    lineHeight = 20.sp
                 )
             }
         }
     }
 }
+
+
+@Composable
+fun MessageInput(onMessageSend: (String) -> Unit) {
+
+    var message by remember { mutableStateOf("") }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        OutlinedTextField(
+            modifier = Modifier.weight(1f),
+            value = message,
+            onValueChange = { message = it },
+            placeholder = { Text("Type a message…"
+            , color = Color.White) },
+            textStyle = TextStyle(color = Color.White) ,
+            shape = RoundedCornerShape(24.dp),
+            maxLines = 4,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.White,
+                unfocusedBorderColor = Color.LightGray,
+                cursorColor = Color.White
+            )
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        IconButton(
+            modifier = Modifier
+                .size(52.dp)
+                .clip(RoundedCornerShape(26.dp))
+                .background(MaterialTheme.colorScheme.primary),
+            onClick = {
+                if (message.isNotBlank()) {
+                    onMessageSend(message)
+                    message = ""
+                }
+            }
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.Send,
+                contentDescription = "Send",
+                tint = Color.White
+            )
+        }
+    }
+}
+
 
 @Composable
 fun AppHeader() {
@@ -182,12 +212,14 @@ fun AppHeader() {
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primary)
+            .padding(vertical = 14.dp)
     ) {
         Text(
-            modifier = Modifier.padding(16.dp),
-            text = "CHAT BOT APP",
+            modifier = Modifier.align(Alignment.Center),
+            text = "AI Bot ",
             color = Color.White,
-            fontSize = 22.sp
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
         )
     }
 }
