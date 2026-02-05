@@ -64,6 +64,8 @@ fun ChatPage(
         )
     )
 
+
+
     Column(
         modifier = modifier.fillMaxSize().background(gradientBrush)
     ) {
@@ -94,10 +96,10 @@ fun MessageList(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = null,
                 modifier = Modifier.size(72.dp),
-                tint = Pink40
+                tint = Color.White
             )
             Text(
-                text = "Ask me anything in English 👋",
+                text = "Ask me anything 👋",
                 fontSize = 18.sp, color = Color.White,
                 fontWeight = FontWeight.Medium
             )
@@ -210,8 +212,8 @@ fun MessageInput(onMessageSend: (String) -> Unit) {
 fun AppHeader() {
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primary)
+            .fillMaxWidth().
+                background(color = Color.Transparent)
             .padding(vertical = 14.dp)
     ) {
         Text(

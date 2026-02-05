@@ -6,12 +6,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
 import com.example.englishaibot.Activity.BaseActivity
@@ -25,15 +27,24 @@ class MainActivity : BaseActivity() {
         enableEdgeToEdge()
         val  ChatViewModel = ViewModelProvider(this)[ChatViewModel:: class.java]
         setContent {
-            EasyBotTheme() {
-                Scaffold(modifier = Modifier.fillMaxSize()) {innerPadding ->
+            EasyBotTheme {
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    containerColor = Color(0xFF0F2027) // 👈 IMPORTANT
 
-                    ChatPage(modifier = Modifier.padding(innerPadding),
-                        ChatViewModel)
+                ) { innerPadding ->
 
+
+                    ChatPage(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
+                        viewModel = ChatViewModel
+                    )
                 }
             }
-            }
+
+        }
         }
     }
 
